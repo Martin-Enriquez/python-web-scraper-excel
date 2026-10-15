@@ -1,77 +1,45 @@
-# 📊 Web Scraper → Excel con formato
+# 📊 Web Scraper → Formatted Excel Exporter
 
-Script en Python que extrae el catálogo completo de [books.toscrape.com](http://books.toscrape.com/) (1000 libros, 50 páginas), limpia los datos y genera un archivo Excel listo para compartir.
+A robust Python script that crawls the full [books.toscrape.com](http://books.toscrape.com/) catalogue (1,000 books across 50 pages), cleans the extracted data, and generates a professionally formatted Excel report.
 
-> **Nota:** `books.toscrape.com` es un sitio de práctica creado para aprender scraping. El proyecto demuestra el flujo completo (extracción → limpieza → reporte) y la misma estructura se puede adaptar a otros sitios, respetando sus términos de uso.
+> **Note:** `books.toscrape.com` is a practice website designed for web scraping. This project demonstrates an end-to-end data pipeline (extraction → cleaning → reporting) that can easily be adapted for other e-commerce platforms and business automation needs.
 
-*English summary: Python scraper that crawls the full books.toscrape.com catalogue (with pagination), cleans the data with pandas and exports a styled `.xlsx` report with openpyxl. Usage instructions below.*
+## ✨ Features
 
-## ✨ Qué hace
+- **Full Catalogue Crawling:** Handles automated pagination by following the "next" page links.
+- **Data Cleaning & Normalization:** Parses price strings to numeric float values (`£51.77` → `51.77`) and converts star ratings to integers (1–5).
+- **Fault-Tolerant & Polite:** Implements HTTP request timeouts, automatic retry strategies with backoff, and custom request delays to respect target servers.
+- **Professional Excel Output:** Custom header styling, currency formatting, auto-filters, frozen top rows, auto-adjusted column widths, and clickable links to product pages.
 
-- **Recorre todas las páginas** del catálogo siguiendo el enlace "next".
-- **Limpia los datos:** precios como número (`£51.77` → `51.77`), valoración en estrellas como entero (1–5).
-- **Es tolerante a fallos:** `timeout`, reintentos automáticos y espera entre peticiones.
-- **Genera un Excel profesional:** encabezados con color, formato de moneda, filtros, fila fija, anchos de columna automáticos y enlaces clicables a cada libro.
+## 📋 Report Structure
 
-## 📋 Columnas del reporte
-
-| Columna | Descripción |
+| Column | Description |
 |---|---|
-| Título | Nombre completo del libro |
-| Precio (£) | Precio como número, con formato de moneda en Excel |
-| Valoración (1-5) | Estrellas del libro |
-| Disponibilidad | Estado de stock |
-| URL | Enlace a la ficha del libro |
+| Title | Full product title |
+| Price (£) | Formatted numeric price |
+| Rating (1-5) | Star rating converted to integer |
+| Availability | Stock availability status |
+| URL | Direct link to the book product page |
 
-## 🛠️ Tecnologías
+## 🛠️ Tech Stack
 
-Python 3.9+ · Requests · BeautifulSoup4 · pandas · openpyxl
+Python 3.9+ · Requests · BeautifulSoup4 · Pandas · OpenPyXL
 
-## 🚀 Instalación y uso
+## 🚀 Installation & Usage
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/Martin-Enriquez/python-web-scraper-excel.git
+# 1. Clone the repository
+git clone [https://github.com/Martin-Enriquez/python-web-scraper-excel.git](https://github.com/Martin-Enriquez/python-web-scraper-excel.git)
 cd python-web-scraper-excel
 
-# 2. (Opcional) Crear un entorno virtual
-python -m venv venv
-source venv/bin/activate        # En Windows: venv\Scripts\activate
+# 2. (Optional) Create a virtual environment
+python3 -m venv venv
+source venv/bin/activate        # On Windows: venv\Scripts\activate
 
-# 3. Instalar dependencias
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Ejecutar
-python main.py
+# 4. Run the scraper
+python3 main.py
 ```
-
-Se generará `reporte_libros.xlsx` en la carpeta del proyecto.
-
-### Opciones
-
-```bash
-python main.py --max-pages 5              # solo las primeras 5 páginas
-python main.py --output mis_libros.xlsx   # nombre del archivo de salida
-python main.py --delay 1                  # 1 segundo entre peticiones
-python main.py --help                     # ver todas las opciones
-```
-
-## 🗂️ Estructura
-
-```
-main.py            # scraper + exportación a Excel
-requirements.txt   # dependencias
-LICENSE            # MIT
-```
-
-Funciones principales en `main.py`: `scrape_books()` (extracción con paginación), `parse_books()` (parseo de una página) y `export_to_styled_excel()` (generación del reporte).
-
-## 🗺️ Ideas para seguir
-
-- Añadir la categoría de cada libro (requiere visitar cada ficha).
-- Exportar también a CSV o a una base de datos SQLite.
-- Pruebas automáticas para `parse_price` y `parse_books`.
-
-## 📄 Licencia
-
-MIT — ver [LICENSE](LICENSE).
+<img width="1280" height="563" alt="Captura de pantalla 2026-10-14 a la(s) 9 10 39 p  m" src="https://github.com/user-attachments/assets/7489b6e8-22e7-43a3-a3f0-0016ca94ebf5" />
