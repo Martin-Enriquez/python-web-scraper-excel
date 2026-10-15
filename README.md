@@ -1,66 +1,77 @@
-# 📊 Automated Web Scraper & Formatted Excel Exporter
-*Automated Web Data Extraction and Formatted Excel Exporting Tool*
+# 📊 Web Scraper → Excel con formato
 
----
+Script en Python que extrae el catálogo completo de [books.toscrape.com](http://books.toscrape.com/) (1000 libros, 50 páginas), limpia los datos y genera un archivo Excel listo para compartir.
 
-## Project Overview
+> **Nota:** `books.toscrape.com` es un sitio de práctica creado para aprender scraping. El proyecto demuestra el flujo completo (extracción → limpieza → reporte) y la misma estructura se puede adaptar a otros sitios, respetando sus términos de uso.
 
-This project is an automated Python solution for web scraping, data processing, and corporate Excel report generation.
+*English summary: Python scraper that crawls the full books.toscrape.com catalogue (with pagination), cleans the data with pandas and exports a styled `.xlsx` report with openpyxl. Usage instructions below.*
 
-The script extracts structured data from an online catalog, performs data cleaning and transformation (currency and numeric conversion), and exports a professionally styled `.xlsx` file complete with custom header formatting, auto-fit columns, and proper alignment.
+## ✨ Qué hace
 
-### 🚀 Key Features
-- **Data Extraction:** Efficient DOM parsing with `BeautifulSoup4` and HTTP requests via `requests`.
-- **Data Cleaning & Transformation:** Normalization of string data into numeric formats (`float`) using `pandas`.
-- **Automated Formatted Export:** Dynamic Excel styling powered by `openpyxl` (custom header colors, corporate fonts, and automatic column width adjustment).
-- **Modular & Scalable Code:** Designed following Python best practices for easy integration into automated pipelines.
+- **Recorre todas las páginas** del catálogo siguiendo el enlace "next".
+- **Limpia los datos:** precios como número (`£51.77` → `51.77`), valoración en estrellas como entero (1–5).
+- **Es tolerante a fallos:** `timeout`, reintentos automáticos y espera entre peticiones.
+- **Genera un Excel profesional:** encabezados con color, formato de moneda, filtros, fila fija, anchos de columna automáticos y enlaces clicables a cada libro.
 
-### 🛠️ Tech Stack
-- **Python 3.10+**
-- **Requests:** HTTP client for web requests.
-- **BeautifulSoup4:** HTML parsing and extraction.
-- **Pandas:** Data manipulation and structuring.
-- **OpenPyXL:** Excel spreadsheet styling and export.
+## 📋 Columnas del reporte
 
----
+| Columna | Descripción |
+|---|---|
+| Título | Nombre completo del libro |
+| Precio (£) | Precio como número, con formato de moneda en Excel |
+| Valoración (1-5) | Estrellas del libro |
+| Disponibilidad | Estado de stock |
+| URL | Enlace a la ficha del libro |
 
-## Descripción del Proyecto
+## 🛠️ Tecnologías
 
-Este proyecto es una solución automatizada en Python para la extracción de datos web (*web scraping*), procesamiento de datos y generación de reportes corporativos en Excel. 
+Python 3.9+ · Requests · BeautifulSoup4 · pandas · openpyxl
 
-El script extrae información estructurada de un catálogo en línea, realiza la limpieza y transformación de los datos (conversión de divisas/formatos numéricos) y exporta un archivo `.xlsx` estilizado profesionalmente con encabezados corporativos, alineación automática y ajuste de columnas.
+## 🚀 Instalación y uso
 
-### 🚀 Características Clave
-- **Extracción de Datos:** Parseo eficiente del DOM mediante `BeautifulSoup4` y peticiones HTTP con `requests`.
-- **Procesamiento y Limpieza:** Normalización de datos textuales a tipos numéricos (`float`) usando `pandas`.
-- **Generación de Reportes Estilizados:** Formateo dinámico de tablas de Excel con `openpyxl` (colores de encabezado, tipografía corporativa y auto-ajuste de ancho de columnas).
-- **Código Modular y Escalable:** Estructurado siguiendo las mejores prácticas de Python para facilitar su integración en flujos de trabajo más amplios.
-
-### 🛠️ Tecnologías
-- **Python 3.10+**
-- **Requests:** Gestión de peticiones HTTP.
-- **BeautifulSoup4:** Extracción y parseo de HTML.
-- **Pandas:** Manipulación y estructuración de datos.
-- **OpenPyXL:** Estilización y exportación a archivos Excel.
-
----
-
-
-## 📦 Instalación y Uso / Installation & Usage
-
-### Prerrequisitos / Prerequisites
-Asegúrate de tener instalado Python 3.10 o superior y Git. / *Ensure Python 3.10+ and Git are installed.*
-
----
-
-## 📦 Instalación y Uso / Installation & Usage
-
-### Prerrequisitos / Prerequisites
-Asegúrate de tener instalado Python 3.10 o superior y Git. / *Ensure Python 3.10+ and Git are installed.*
-
----
-
-### 1. Clonar el repositorio / Clone the repository
 ```bash
-git clone [https://github.com/Martin-Enriquez/python-web-scraper-excel.git](https://github.com/Martin-Enriquez/python-web-scraper-excel.git)
+# 1. Clonar el repositorio
+git clone https://github.com/Martin-Enriquez/python-web-scraper-excel.git
 cd python-web-scraper-excel
+
+# 2. (Opcional) Crear un entorno virtual
+python -m venv venv
+source venv/bin/activate        # En Windows: venv\Scripts\activate
+
+# 3. Instalar dependencias
+pip install -r requirements.txt
+
+# 4. Ejecutar
+python main.py
+```
+
+Se generará `reporte_libros.xlsx` en la carpeta del proyecto.
+
+### Opciones
+
+```bash
+python main.py --max-pages 5              # solo las primeras 5 páginas
+python main.py --output mis_libros.xlsx   # nombre del archivo de salida
+python main.py --delay 1                  # 1 segundo entre peticiones
+python main.py --help                     # ver todas las opciones
+```
+
+## 🗂️ Estructura
+
+```
+main.py            # scraper + exportación a Excel
+requirements.txt   # dependencias
+LICENSE            # MIT
+```
+
+Funciones principales en `main.py`: `scrape_books()` (extracción con paginación), `parse_books()` (parseo de una página) y `export_to_styled_excel()` (generación del reporte).
+
+## 🗺️ Ideas para seguir
+
+- Añadir la categoría de cada libro (requiere visitar cada ficha).
+- Exportar también a CSV o a una base de datos SQLite.
+- Pruebas automáticas para `parse_price` y `parse_books`.
+
+## 📄 Licencia
+
+MIT — ver [LICENSE](LICENSE).
