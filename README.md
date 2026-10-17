@@ -1,45 +1,62 @@
-# 📊 Web Scraper → Formatted Excel Exporter
+# 📚 Web Scraper to Excel (USD)
 
-A robust Python script that crawls the full [books.toscrape.com](http://books.toscrape.com/) catalogue (1,000 books across 50 pages), cleans the extracted data, and generates a professionally formatted Excel report.
+Python command-line tool that scrapes a product catalog and exports a clean, formatted Excel report with prices converted to US dollars.
 
-> **Note:** `books.toscrape.com` is a practice website designed for web scraping. This project demonstrates an end-to-end data pipeline (extraction → cleaning → reporting) that can easily be adapted for other e-commerce platforms and business automation needs.
+## Features
 
-## ✨ Features
+- **Full catalog crawl:** follows pagination automatically, with retries on server errors and a polite delay between requests.
+- **Clean data:** title, price, rating (1-5), availability, and a clickable product link.
+- **USD conversion:** prices are converted from GBP using a configurable exchange rate and formatted as `$`.
+- **Styled Excel report:** colored headers, frozen header row, auto-filters, auto-fitted columns.
+- **Summary sheet:** run date, source, exchange rate, number of books, and price/rating statistics.
 
-- **Full Catalogue Crawling:** Handles automated pagination by following the "next" page links.
-- **Data Cleaning & Normalization:** Parses price strings to numeric float values (`£51.77` → `51.77`) and converts star ratings to integers (1–5).
-- **Fault-Tolerant & Polite:** Implements HTTP request timeouts, automatic retry strategies with backoff, and custom request delays to respect target servers.
-- **Professional Excel Output:** Custom header styling, currency formatting, auto-filters, frozen top rows, auto-adjusted column widths, and clickable links to product pages.
+## Quick Start
 
-## 📋 Report Structure
+```bash
+git clone https://github.com/<your-user>/<your-repo>.git
+cd <your-repo>
+pip install -r requirements.txt
+python main.py
+```
 
-| Column | Description |
+## Options
+
+| Option | Default | Description |
+|---|---|---|
+| `--url` | books.toscrape.com, page 1 | First catalog page to scrape. |
+| `--max-pages` | all pages | Limit the number of pages (e.g. `--max-pages 5`). |
+| `--delay` | `0.5` | Seconds to wait between pages. |
+| `--rate` | `1.34` (or env `GBP_USD_RATE`) | GBP → USD exchange rate. Update it before real use. |
+| `--include-gbp` | off | Adds the original GBP price as an extra column. |
+| `--output` | `books_report.xlsx` | Excel output file name. |
+
+Example:
+
+```bash
+python main.py --max-pages 5 --rate 1.34 --include-gbp --output books.xlsx
+```
+
+## Output
+
+**`books_report.xlsx`**
+
+| Sheet | Contents |
 |---|---|
-| Title | Full product title |
-| Price (£) | Formatted numeric price |
-| Rating (1-5) | Star rating converted to integer |
-| Availability | Stock availability status |
-| URL | Direct link to the book product page |
+| `Books` | Title, price ($), rating, availability, and product URL (optionally the source GBP price). |
+| `Summary` | Run date, source, currencies, exchange rate, books extracted, average / lowest / highest price, and average rating. |
 
-## 🛠️ Tech Stack
+## Scope & Limitations
+
+- The data source is [books.toscrape.com](http://books.toscrape.com), a sandbox site built for scraping practice.
+- Prices are converted at a fixed rate that you provide; they are not live exchange rates.
+- Prices exclude taxes and shipping.
+- Built for sites with static HTML. Sites with login, heavy JavaScript, or anti-bot protection are not supported.
+- Always check a site's terms of use and `robots.txt` before scraping it.
+
+## Tech Stack
 
 Python 3.9+ · Requests · BeautifulSoup4 · Pandas · OpenPyXL
 
-## 🚀 Installation & Usage
+## License
 
-```bash
-# 1. Clone the repository
-git clone [https://github.com/Martin-Enriquez/python-web-scraper-excel.git](https://github.com/Martin-Enriquez/python-web-scraper-excel.git)
-cd python-web-scraper-excel
-
-# 2. (Optional) Create a virtual environment
-python3 -m venv venv
-source venv/bin/activate        # On Windows: venv\Scripts\activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Run the scraper
-python3 main.py
-```
-<img width="1280" height="563" alt="Captura de pantalla 2026-10-14 a la(s) 9 10 39 p  m" src="https://github.com/user-attachments/assets/7489b6e8-22e7-43a3-a3f0-0016ca94ebf5" />
+See the [LICENSE](LICENSE) file for details.
